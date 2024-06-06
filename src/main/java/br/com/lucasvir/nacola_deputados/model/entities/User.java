@@ -4,6 +4,7 @@ import br.com.lucasvir.nacola_deputados.model.enums.UnidadeFederativa;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,17 +23,20 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private UnidadeFederativa uf;
 
-//    private List<Deputado> deputados;
+    @OneToMany
+    @JoinTable(name = "user_deputados", joinColumns = @JoinColumn(name = "user_id"))
+    private List<Deputado> deputados;
 
     public User() {
+        this.deputados = new ArrayList<>();
     }
 
-    public User(String name, String email, String password, UnidadeFederativa uf, List<Deputado> deputados) {
+    public User(String name, String email, String password, UnidadeFederativa uf) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.uf = uf;
-//        this.deputados = deputados;
+        this.deputados = new ArrayList<>();
     }
 
     public Long getId() {
@@ -55,10 +59,14 @@ public class User implements Serializable {
         return uf;
     }
 
-//    public List<Deputado> getDeputados() {
-//        return deputados;
-//    }
-//
+    public List<Deputado> getDeputados() {
+        return deputados;
+    }
+
+    public void setDeputados(List<Deputado> deputados) {
+        this.deputados = deputados;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,8 +88,10 @@ public class User implements Serializable {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", uf=" + uf +
-//                ", deputados=" + deputados +
+                ", deputados=" + deputados +
                 '}';
     }
+
+
 }
 

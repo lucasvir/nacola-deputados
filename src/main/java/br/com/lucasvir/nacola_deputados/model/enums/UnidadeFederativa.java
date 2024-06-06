@@ -35,8 +35,29 @@ public enum UnidadeFederativa {
     private final String capital;
 
     UnidadeFederativa(final String nome, final String sigla, final String capital) {
-    this.nome = nome;
-    this.sigla = sigla;
-    this.capital = capital;
-  }
+        this.nome = nome;
+        this.sigla = sigla;
+        this.capital = capital;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public String getCapital() {
+        return capital;
+    }
+
+    public static UnidadeFederativa fromSigla(final String sigla) {
+        for (final UnidadeFederativa uf : UnidadeFederativa.values()) {
+            if (uf.sigla.equalsIgnoreCase(sigla)) {
+                return uf;
+            }
+        }
+        throw new IllegalArgumentException(sigla);
+    }
 }

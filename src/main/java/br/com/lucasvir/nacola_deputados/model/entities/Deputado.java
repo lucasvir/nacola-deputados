@@ -1,12 +1,23 @@
 package br.com.lucasvir.nacola_deputados.model.entities;
 
+import br.com.lucasvir.nacola_deputados.model.dtos.DeputadosDTO;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
 public class Deputado implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
     private String email;
     private String siglaPartido;
     private String siglaUf;
@@ -21,6 +32,14 @@ public class Deputado implements Serializable {
         this.siglaPartido = siglaPartido;
         this.siglaUf = siglaUf;
         this.urlFoto = urlFoto;
+    }
+
+    public Deputado(DeputadosDTO dto) {
+        this.name = dto.nome();
+        this.email = dto.email();
+        this.siglaPartido = dto.siglaPartido();
+        this.siglaUf = dto.siglaUf();
+        this.urlFoto = dto.urlFoto();
     }
 
     public Long getId() {
