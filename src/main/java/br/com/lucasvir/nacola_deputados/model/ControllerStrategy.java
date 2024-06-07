@@ -4,11 +4,11 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public interface ControllerStrategy<T,K> {
+public interface ControllerStrategy<T, K> {
 
-   <T> ResponseEntity<List<T>> index();
+    ResponseEntity<List<T>> index();
 
-   <T> ResponseEntity<T> create(K k);
+    ResponseEntity<T> create(K k);
 
-    <T> ResponseEntity<T> show(Long id);
+    ResponseEntity<T> show(Long id);
 }

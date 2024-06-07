@@ -1,8 +1,7 @@
 package br.com.lucasvir.nacola_deputados.model.dtos;
 
-public record DeputadosDTO(
-        Long id,
-        String nome,
+public record DeputadoCreateDTO(
+        String name,
         String email,
         String siglaPartido,
         String siglaUf,

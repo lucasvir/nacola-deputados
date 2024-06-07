@@ -23,8 +23,8 @@ public class User implements Serializable {
     @Enumerated(EnumType.STRING)
     private UnidadeFederativa uf;
 
-    @OneToMany
-    @JoinTable(name = "user_deputados", joinColumns = @JoinColumn(name = "user_id"))
+    @ManyToMany
+    @JoinTable(name = "user_deputados", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "deputado_id"))
     private List<Deputado> deputados;
 
     public User() {
@@ -91,7 +91,5 @@ public class User implements Serializable {
                 ", deputados=" + deputados +
                 '}';
     }
-
-
 }
 

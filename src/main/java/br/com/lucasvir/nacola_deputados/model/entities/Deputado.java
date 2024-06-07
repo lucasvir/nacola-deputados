@@ -1,6 +1,7 @@
 package br.com.lucasvir.nacola_deputados.model.entities;
 
-import br.com.lucasvir.nacola_deputados.model.dtos.DeputadosDTO;
+import br.com.lucasvir.nacola_deputados.model.dtos.DeputadoCreateDTO;
+import br.com.lucasvir.nacola_deputados.model.dtos.DeputadoDataDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,7 +35,15 @@ public class Deputado implements Serializable {
         this.urlFoto = urlFoto;
     }
 
-    public Deputado(DeputadosDTO dto) {
+    public Deputado(DeputadoCreateDTO dto) {
+        this.name = dto.name();
+        this.email = dto.email();
+        this.siglaPartido = dto.siglaPartido();
+        this.siglaUf = dto.siglaUf();
+        this.urlFoto = dto.urlFoto();
+    }
+
+    public Deputado(DeputadoDataDTO dto) {
         this.name = dto.nome();
         this.email = dto.email();
         this.siglaPartido = dto.siglaPartido();

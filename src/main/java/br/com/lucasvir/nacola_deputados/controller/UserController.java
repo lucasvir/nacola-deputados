@@ -31,7 +31,8 @@ public class UserController implements ControllerStrategy<UserResponseDTO, UserC
     public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO dto) {
         UserResponseDTO user = userService.create(dto);
         URI uri =
-                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.id()).toUri();
+                ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{id}").buildAndExpand(user.id()).toUri();
 
         return ResponseEntity.created(uri).body(user);
     }
@@ -42,5 +43,4 @@ public class UserController implements ControllerStrategy<UserResponseDTO, UserC
         UserResponseDTO user = userService.show(id);
         return ResponseEntity.ok(user);
     }
-
 }
