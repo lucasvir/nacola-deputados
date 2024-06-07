@@ -1,15 +1,17 @@
 package br.com.lucasvir.nacola_deputados.services;
 
 import br.com.lucasvir.nacola_deputados.exceptions.EmptyResourceException;
+import br.com.lucasvir.nacola_deputados.exceptions.InvalidArgumentException;
 import br.com.lucasvir.nacola_deputados.exceptions.ResourceNotFound;
 import br.com.lucasvir.nacola_deputados.model.dtos.DeputadoDataDTO;
 import br.com.lucasvir.nacola_deputados.model.dtos.DeputadoResponseDTO;
-import br.com.lucasvir.nacola_deputados.model.dtos.DeputadosResultDTO;
 import br.com.lucasvir.nacola_deputados.model.entities.Deputado;
+import br.com.lucasvir.nacola_deputados.model.enums.UnidadeFederativa;
 import br.com.lucasvir.nacola_deputados.repositories.DeputadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -28,8 +30,12 @@ public class DeputadoService {
         return deputados.stream().map(DeputadoResponseDTO::new).toList();
     }
 
-    public List<DeputadoResponseDTO> findAllByUf(String uf) {
-        List<Deputado> deputados = deputadoRepository.findAllByUf(uf);
+    public List<DeputadoResponseDTO> indexAllByUf(String uf) {
+        checkSiglaExists(uf);
+
+        List<Deputado> deputados = deputadoRepository.findAllBySiglaUfIgnoreCase(uf);
+        if (deputados.isEmpty()) throw new EmptyResourceException();
+
         return deputados.stream().map(DeputadoResponseDTO::new).toList();
     }
 
@@ -47,16 +53,25 @@ public class DeputadoService {
 
     public List<Deputado> agregarDeputados(String siglaUf) {
         List<Deputado> deputadosEntities;
-        boolean deputadosUfExists = deputadoRepository.existsBySiglaUf(siglaUf);
+        checkSiglaExists(siglaUf);
 
-        if (deputadosUfExists) {
-            deputadosEntities = deputadoRepository.findAllByUf(siglaUf);
-        } else {
+        boolean existsUf = deputadoRepository.existsBySiglaUfIgnoreCase(siglaUf);
+
+        if (!existsUf) {
             List<DeputadoDataDTO> deputadosData = deputadosApi.consumirDeputados(siglaUf);
-            List<Deputado> deputados = deputadosData.stream().map(Deputado::new).toList();
-            deputadosEntities = deputadoRepository.saveAll(deputados);
-        }
+            if (deputadosData == null)
+                throw new RuntimeException("Erro ao consumir api externa. Argumento: " + siglaUf);
 
-        return deputadosEntities;
+            List<Deputado> deputados = deputadosData.stream().map(Deputado::new).toList();
+            return deputadoRepository.saveAll(deputados);
+        } else {
+            var deputadosss = deputadoRepository.findAllBySiglaUfIgnoreCase(siglaUf);
+            return  deputadosss;
+        }
+    }
+
+    private void checkSiglaExists(String siglaUf) {
+        boolean siglaExists = Arrays.stream(UnidadeFederativa.values()).anyMatch(u -> u.getSigla().equalsIgnoreCase(siglaUf));
+        if (!siglaExists) throw new InvalidArgumentException(siglaUf);
     }
 }

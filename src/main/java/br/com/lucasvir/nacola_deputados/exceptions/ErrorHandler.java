@@ -21,4 +21,9 @@ public class ErrorHandler {
     private ResponseEntity<String> handle400AlredyRegisteredException(ResourceNotFound ex) {
         return ResponseEntity.status(ex.getStatusCode()).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidArgumentException.class)
+    private ResponseEntity<String> handle400InvalidArgumentException(InvalidArgumentException ex) {
+        return ResponseEntity.status(ex.getStatusCode()).body(ex.getMessage());
+    }
 }

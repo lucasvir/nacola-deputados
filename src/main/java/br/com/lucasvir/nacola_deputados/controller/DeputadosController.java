@@ -33,14 +33,14 @@ public class DeputadosController implements ControllerStrategy<DeputadoResponseD
     @GetMapping("/consumir/{siglaUf}")
     public ResponseEntity<DeputadoResponseDTO> create(@PathVariable String siglaUf) {
         List<DeputadoResponseDTO> deputados = deputadoService.create(siglaUf);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{siglaUf}").buildAndExpand(deputados.get(0).siglaUf()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{siglaUf}").buildAndExpand(deputados.get(0).id()).toUri();
 
         return ResponseEntity.created(uri).body(deputados.get(0));
     }
 
     @GetMapping("estado/{siglaUf}")
     public ResponseEntity<List<DeputadoResponseDTO>> indexByUf(@PathVariable String siglaUf) {
-        List<DeputadoResponseDTO> deputados = deputadoService.findAllByUf(siglaUf);
+        List<DeputadoResponseDTO> deputados = deputadoService.indexAllByUf(siglaUf);
         return ResponseEntity.ok(deputados);
     }
 
