@@ -1,6 +1,5 @@
 package br.com.lucasvir.nacola_deputados.controller;
 
-import br.com.lucasvir.nacola_deputados.model.ControllerStrategy;
 import br.com.lucasvir.nacola_deputados.model.dtos.DeputadoResponseDTO;
 import br.com.lucasvir.nacola_deputados.services.ConsumoDeputadosApiService;
 import br.com.lucasvir.nacola_deputados.services.DeputadoService;

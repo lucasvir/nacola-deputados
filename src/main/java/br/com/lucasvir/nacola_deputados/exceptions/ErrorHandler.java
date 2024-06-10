@@ -18,7 +18,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(ResourceNotFound.class)
-    private ResponseEntity<String> handle400AlredyRegisteredException(ResourceNotFound ex) {
+    private ResponseEntity<String> handle400ResourceNotFoundException(ResourceNotFound ex) {
         return ResponseEntity.status(ex.getStatusCode()).body(ex.getMessage());
     }
 

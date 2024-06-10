@@ -1,4 +1,4 @@
-package br.com.lucasvir.nacola_deputados.model;
+package br.com.lucasvir.nacola_deputados.controller;
 
 import org.springframework.http.ResponseEntity;
 
