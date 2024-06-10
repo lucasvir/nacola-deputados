@@ -1,6 +1,7 @@
 package br.com.lucasvir.nacola_deputados.config;
 
 import br.com.lucasvir.nacola_deputados.security.JWTAuthFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,14 +21,18 @@ import java.util.List;
 @EnableWebSecurity
 public class JWTAuthFilterConfig {
 
-    private final AuthenticationProvider authProvider;
-    private final JWTAuthFilter jwtAuthFilter;
+    @Autowired
+    private AuthenticationProvider authProvider;
 
+    @Autowired
+    private JWTAuthFilter jwtAuthFilter;
 
-    public JWTAuthFilterConfig(AuthenticationProvider authProvider, JWTAuthFilter jwtAuthFilter) {
-        this.authProvider = authProvider;
-        this.jwtAuthFilter = jwtAuthFilter;
-    }
+    private static final String[] AUTH_WHITE_LIST = {
+            "/api-docs/**",
+            "/swagger-ui/**",
+            "/api-docs/**",
+            "/swagger-resources/**"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,6 +40,8 @@ public class JWTAuthFilterConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authReq -> {
                     authReq.requestMatchers("/auth/**")
+                            .permitAll()
+                            .requestMatchers(AUTH_WHITE_LIST)
                             .permitAll()
                             .anyRequest()
                             .authenticated();
