@@ -10,6 +10,7 @@ import br.com.lucasvir.nacola_deputados.model.entities.User;
 import br.com.lucasvir.nacola_deputados.model.enums.UnidadeFederativa;
 import br.com.lucasvir.nacola_deputados.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,9 @@ public class UserService {
 
     @Autowired
     private DeputadoService deputadoService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserResponseDTO> index() {
         List<User> users = userRepository.findAll();
@@ -38,7 +42,7 @@ public class UserService {
         User user = new User(
                 dto.name(),
                 dto.email(),
-                dto.password(),
+                passwordEncoder.encode(dto.password()),
                 uf
         );
 
@@ -53,5 +57,10 @@ public class UserService {
     public UserResponseDTO show(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFound(id.toString()));
         return new UserResponseDTO(user);
+    }
+
+    public User showByEmail(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFound(email));
+        return user;
     }
 }

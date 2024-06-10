@@ -19,23 +19,22 @@ import java.io.IOException;
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
 
-    private final String AUTH_HEADER = "Authorization";
-    private final String AUTH_HEADER_PREFIX = "Bearer ";
+    public static final String AUTH_HEADER = "Authorization";
+    public static final String AUTH_HEADER_PREFIX = "Bearer ";
 
-    private final JWTService jwtService;
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    private JWTService jwtService;
 
-    public JWTAuthFilter(JWTService jwtService, UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
-        this.userDetailsService = userDetailsService;
-    }
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String authHeader = request.getHeader("Authorizaiton");
+        final String authHeader = request.getHeader(AUTH_HEADER);
 
         if(authHeader == null || !authHeader.startsWith(AUTH_HEADER_PREFIX)) {
             filterChain.doFilter(request, response);
+            return;
         }
 
         try {
