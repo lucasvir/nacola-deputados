@@ -1,5 +1,4 @@
 # Na Cola - API
-[![NPM](https://img.shields.io/npm/l/react)](https://github.com/lucasvir/jornadamilhas/blob/main/LICENSE)
 
 # :scroll: Descrição
 
